@@ -1,2 +1,2 @@
 # hello_world
-Learning git
+Package python
