@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import argparse
 import os
@@ -12,7 +12,7 @@ class Parser:
 
         self.parser = argparse.ArgumentParser(description='LZW Compress/Decompress')
         self._args = []
-        self._acceptExtCompress = ['.html','.htm','.c','.cc','.txt','.py']      # few samples
+        self._acceptExtCompress = ['.html','.htm','.c','.cc','.txt','.py']
         self._acceptExtDecompress = ['.lzw','.z','.Z']
 
    
@@ -22,31 +22,34 @@ class Parser:
         self.parser.add_argument('-v','--verbose', help = 'Add Verbosity', action='store_true', default=False)
         action = self.parser.add_mutually_exclusive_group(required=True)
         action.add_argument('-r','--recursive', nargs=1, help='Recursive mode over a directory', default = '')
-        action.add_argument('-d', '--decompress', type=str, nargs=1, help='Decompress mode', default = '')
-        action.add_argument('-c', '--compress', type=str, nargs=1, help='Compress mode', default = '')
+        action.add_argument('-d', '--decompress', nargs='+', help='Decompress mode', default= [])
+        action.add_argument('-c', '--compress', nargs='+', help='Compress mode', default = [])
 
 
         args = self.parser.parse_args()
 
-        # qui può essere più pitonico
         R = ''.join(args.recursive)
-        D = ''.join(args.decompress)
-        C = ''.join(args.compress)
+        Clist = []
+        Dlist = []
+        for i in args.compress:
+            if os.path.isfile(i):
+                Clist.append(i)
         V = args.verbose
+        for j in args.decompress:
+            if os.path.isfile(j):
+                Dlist.append(j)
+        V = args.verbose
+        self.call(R=R,V=V,listC=Clist,listD=Dlist)
 
-        self.call(R=R,V=V,D=D,C=C)
-
-    def call(self,R=None,V=None,D=None,C=None, listC=None):
+    def call(self,R=None,V=None, listC=None, listD=None):
 
         if R and os.path.isdir(R):     
              self.isaDir(R, V)
-        elif D and os.path.isfile(D):
-            self.isaFile(D, 2 , V)
-        elif C and os.path.isfile(C):
-            self.isaFile(C, 1, V)
-        elif listC:
+        elif listC or listD:
             for i in listC:
                 self.isaFile(i,1,V)
+            for j in listD:
+                self.isaFile(j,2,V)
         else:
             print('Error in insertion')
 
@@ -62,7 +65,6 @@ class Parser:
                 percent = (1-(final_dim/initial_dim))*100
                 if percent > 0:
                     if verbose:                               
-                        # os.path.basename() non funziona su Windows -> /home/... C:\\ ...    
                         print('- compression:', os.path.basename(filename), U(initial_dim), U(final_dim), "{0:.2f}".format(percent)+'%')
                         os.unlink(F)
                 else:
@@ -112,7 +114,7 @@ def main():
     p.action()
 
 
-#main()
+main()
 
 
         

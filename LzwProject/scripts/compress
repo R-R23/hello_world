@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import argparse
+import lzw.pars2
+
+def pars():
+        
+
+        parser = argparse.ArgumentParser(description='LZW Compress')
+        args = []
+        acceptExtCompress = ['.html','.htm','.c','.cc','.txt','.py']
+
+        parser = argparse.ArgumentParser(description='LZW Compress/Decompress')
+        parser.add_argument('-v','--verbose', help = 'Add Verbosity', action='store_true', default=False)
+        action = parser.add_mutually_exclusive_group(required=True)
+        action.add_argument('-r','--recursive', nargs=1, help='Recursive mode over a directory', default = '')
+        action.add_argument('-c', '--compress', nargs='+', help='Compress mode', default = [])
+
+
+        args = parser.parse_args()
+
+        R = ''.join(args.recursive)
+        Clist = []
+        for i in args.compress:
+            if os.path.isfile(i):
+                Clist.append(i)
+
+        V = args.verbose
+        C(R=R,V=V,listC=Clist)

@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+
+import argparse
+from lzw.pars2 import call as C
+
+def pars():
+        
+
+        parser = argparse.ArgumentParser(description='LZW Decompress')
+        args = []
+        acceptExtDecompress = ['.lzw','.z','.Z']
+
+        parser = argparse.ArgumentParser(description='LZW Compress/Decompress')
+        parser.add_argument('-v','--verbose', help = 'Add Verbosity', action='store_true', default=False)
+        action = parser.add_mutually_exclusive_group(required=True)
+        action.add_argument('-d', '--decompress', nargs='+', help='Decompress mode', default= [])
+
+
+
+        args = parser.parse_args()
+
+        Dlist = []
+        for j in args.decompress:
+            if os.path.isfile(j):
+                Dlist.append(j)
+        V = args.verbose
+        C(R=R,V=V,listD=Dlist)
