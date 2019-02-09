@@ -1,1 +1,1 @@
-__all__ = ["LZW","pars"]
+__all__ = ["LZW","pars2"]

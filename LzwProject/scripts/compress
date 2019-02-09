@@ -26,4 +26,4 @@ def pars():
                 Clist.append(i)
 
         V = args.verbose
-        C(R=R,V=V,listC=Clist)
+        lzw.pars2.call(R=R,V=V,listC=Clist)
